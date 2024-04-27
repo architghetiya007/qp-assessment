@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: grocery_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    ports:
+      - '5432:5432'
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      TYPEORM_HOST: db
+      TYPEORM_PORT: 5432
+      TYPEORM_USERNAME: admin
+      TYPEORM_PASSWORD: password
+      TYPEORM_DATABASE: grocery_db
+    depends_on:
+      - db
