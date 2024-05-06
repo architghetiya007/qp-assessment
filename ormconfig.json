@@ -6,6 +6,6 @@
   "password": "Admin@123",
   "database": "qp",
   "synchronize": true,
-  "logging": true,
+  "logging": false,
   "entities": ["dist/**/**.entity{.ts,.js}"]
 }

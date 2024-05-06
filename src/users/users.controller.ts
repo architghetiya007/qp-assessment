@@ -1,10 +1,16 @@
-import { Controller,Get, Post, Put, Delete, Body, Param, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersDTO } from './users.dto';
+import { UsersEntity } from './users.entity';
 
 @Controller('user')
 export class UsersController {
-    constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService) { }
+
+  @Post('register')
+  async registerUser(@Body() body: UsersEntity) {
+    return this.usersService.registerUser(body);
+  }
 
   @Get()
   async showAllUsers() {
@@ -31,13 +37,13 @@ export class UsersController {
     };
   }
 
-//   @Get(':firstName')
-//   async readUserByFirstName(@Param('firstName') firstName: string) {
-//     return {
-//       statusCode: HttpStatus.OK,
-//       data: await this.usersService.findByfirstName(firstName),
-//     };
-//   }
+  //   @Get(':firstName')
+  //   async readUserByFirstName(@Param('firstName') firstName: string) {
+  //     return {
+  //       statusCode: HttpStatus.OK,
+  //       data: await this.usersService.findByfirstName(firstName),
+  //     };
+  //   }
 
   @Put(':id')
   async uppdateUser(@Param('id') id: number, @Body() data: Partial<UsersDTO>) {
