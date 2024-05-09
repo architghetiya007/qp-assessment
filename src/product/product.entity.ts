@@ -15,6 +15,9 @@ export class ProductEntity {
     @Column()
     price: number;
 
+    @Column({ default: false })
+    isDeleted: boolean;
+
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public createdAt: Date;
 

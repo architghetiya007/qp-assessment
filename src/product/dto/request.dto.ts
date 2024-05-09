@@ -35,3 +35,9 @@ export class UpdateProductRequestDto {
     @Min(1)
     price: number;
 }
+
+export class GetProductRequestDto {
+    @IsNotEmpty()
+    @IsNumber()
+    id: number;
+}
