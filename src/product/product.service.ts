@@ -16,7 +16,7 @@ export class ProductService {
   async create(userId: string, body: CreateProductRequestDto) {
     let product: ProductEntity;
     let createProduct = await this.productRepository.create({ ...body });
-    product = await this.productRepository.save(createProduct); // Save user to the database and return the entity with generated id
+    product = await this.productRepository.save(createProduct);
     return {
       status: true,
       message: 'Product added',

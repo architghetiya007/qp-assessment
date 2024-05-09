@@ -1,4 +1,3 @@
-export class Product { }
 import { Entity, Column, PrimaryGeneratedColumn, Timestamp, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('product')
