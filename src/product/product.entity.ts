@@ -10,10 +10,10 @@ export class ProductEntity {
     name: string;
 
     @Column()
-    inventory: string;
+    inventory: number;
 
     @Column()
-    price: string;
+    price: number;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     public createdAt: Date;

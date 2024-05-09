@@ -1,10 +1,10 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { hashSync, compare } from "bcrypt";
 import { UsersEntity } from './users.entity';
-import { UsersDTO } from './users.dto';
 import { UserAuthService } from 'src/utils/auth/user/user-auth.service';
+import { LoginUserRequestDTO, RegisterRequestDTO } from './DTO/request.dto';
 
 @Injectable()
 export class UsersService {
@@ -14,7 +14,7 @@ export class UsersService {
     private readonly userAuthService: UserAuthService,
   ) { }
 
-  async registerUser(body: UsersEntity) {
+  async registerUser(body: RegisterRequestDTO) {
     let user: UsersEntity;
     try {
       user = await this.usersRepository.findOne({ where: { email: body.email } })
@@ -34,7 +34,8 @@ export class UsersService {
 
     try {
       let password = hashSync(body.password, 10);
-      user = await this.usersRepository.create({ firstName: body.firstName, lastName: body.lastName, email: body.email, password: password })
+      let createdUser = await this.usersRepository.create({ firstName: body.firstName, lastName: body.lastName, email: body.email, password: password });
+      user = await this.usersRepository.save(createdUser); // Save user to the database and return the entity with generated id
     } catch (error) {
       console.log(error, 'error');
       throw new InternalServerErrorException({
@@ -61,35 +62,93 @@ export class UsersService {
     };
   }
 
-  async showAll() {
-    return await this.usersRepository.find();
+  async loginUser(body: LoginUserRequestDTO) {
+    let user: UsersEntity;
+    try {
+      user = await this.usersRepository.findOne({ email: body.email });
+    } catch (error) {
+      throw new InternalServerErrorException({
+        status: false,
+        message: 'Internal server error'
+      })
+    }
+
+    if (!user) {
+      throw new BadRequestException({
+        status: false,
+        message: 'User not found. Please use another email'
+      })
+    }
+
+    let comparePass = await compare(body.password, user.password);
+    if (!comparePass) {
+      throw new UnauthorizedException({
+        status: false,
+        message: 'Password mismatch. Please use another correct one'
+      })
+    }
+
+    const token = await this.userAuthService.signToken({
+      userId: user.id,
+      isAdmin: false,
+      version: Date.now(),
+    });
+
+    return {
+      status: true,
+      message: "Login Successfully",
+      data: {
+        user: user,
+        token: token,
+      },
+    };
   }
 
-  async create(data: UsersDTO) {
-    const user = this.usersRepository.create(data);
-    await this.usersRepository.save(data);
-    return user;
-  }
+  async registerAdmin(body: RegisterRequestDTO) {
+    let user: UsersEntity;
+    try {
+      user = await this.usersRepository.findOne({ where: { email: body.email } })
+    } catch (error) {
+      console.log(error, 'error');
+      throw new InternalServerErrorException({
+        status: false,
+        message: 'Internal server error'
+      })
+    }
+    if (user) {
+      throw new BadRequestException({
+        status: false,
+        message: 'User already registered',
+      })
+    }
 
-  //   async findByfirstName(firstName: string): Promise<UsersDTO> {
-  //     return await this.usersRepository.findOne({
-  //       where: {
-  //         firstName: firstName,
-  //       },
-  //     });
-  //   }
+    try {
+      let password = hashSync(body.password, 10);
+      let createdUser = await this.usersRepository.create({ firstName: body.firstName, lastName: body.lastName, email: body.email, password: password, isAdmin: true });
+      user = await this.usersRepository.save(createdUser); // Save user to the database and return the entity with generated id
+    } catch (error) {
+      console.log(error, 'error');
+      throw new InternalServerErrorException({
+        status: false,
+        message: 'Internal server error'
+      })
+    }
 
-  async read(id: number) {
-    return await this.usersRepository.findOne({ where: { id: id } });
-  }
+    console.log(user, 'user>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
-  async update(id: number, data: Partial<UsersDTO>) {
-    await this.usersRepository.update({ id }, data);
-    return await this.usersRepository.findOne({ id });
-  }
+    const token = await this.userAuthService.signToken({
+      userId: user.id,
+      isAdmin: true,
+      version: Date.now(),
+    });
 
-  async destroy(id: number) {
-    await this.usersRepository.delete({ id });
-    return { deleted: true };
+    return {
+      status: true,
+      message: "User Created Successfully",
+      data: {
+        user: user,
+        token: token,
+      },
+    };
   }
 }

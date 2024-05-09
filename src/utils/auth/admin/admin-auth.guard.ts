@@ -22,11 +22,11 @@ export class AdminAuthGuard {
       const payload = await this.userAuthService.verifyToken(
         token
       );
-      let admin = await this.usersRepository.findOne({ where: { id: payload.userId, isAdmin: true } })
-      if (!admin) {
+      let user = await this.usersRepository.findOne({ where: { id: payload.userId, isAdmin: true } })
+      if (!user) {
         throw new UnauthorizedException();
       }
-      request['admin'] = admin;
+      request['user'] = user;
       return true
       // request['user'] = payload;
     } catch (err) {
