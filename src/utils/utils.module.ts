@@ -9,7 +9,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     JwtModule.registerAsync({
-      imports: [],
       useFactory: async () => ({
         secret: process.env.JWT_SECRET_KEY,
         signOptions: {

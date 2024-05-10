@@ -8,6 +8,9 @@ export class OrderEntity {
     id: number;
 
     @Column()
+    orderId: string;
+
+    @Column()
     qty: number;
 
     @Column()

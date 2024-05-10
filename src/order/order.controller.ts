@@ -8,8 +8,14 @@ import { OrderRequestDTO } from './dto/request.dto';
 export class OrderController {
   constructor(private readonly orderService: OrderService) { }
 
+  @Get('available-product')
+  @UseGuards(UserAuthGuard)
+  availableProduct(@Req() req: any) {
+    return this.orderService.availableProduct(req.user.id);
+  } 
+
   @Post('create')
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(UserAuthGuard)
   create(@Req() req: any, @Body() body: OrderRequestDTO[]) {
     return this.orderService.create(req.user.id, body);
   }
