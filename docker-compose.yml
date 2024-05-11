@@ -1,9 +1,28 @@
-version: '3.1'
+version: '2.2'
 
 services:
-  nestjs:
+  nestjs-app:
     build: .
-    container_name: nestjs
-    restart: always
     ports:
-      - "3000:3000"
+      - "3000:3000"  #NestJS application port
+    environment:
+      MYSQL_HOST: mysql  # Database container name (service name in docker-compose)
+      MYSQL_PORT: 3306  # Standard MySQL port
+      MYSQL_USER: archit  # Replace with your MySQL username
+      MYSQL_PASSWORD: admin123  # Replace with your MySQL password
+      MYSQL_DATABASE: qp_assesement  # Replace with your database name
+    volumes:
+      - ./:/usr/src/app  # Mount current directory for code changes
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0  # MySQL image version
+    environment:
+      MYSQL_ROOT_PASSWORD: admin123  # Replace with your root password
+      MYSQL_DATABASE: qp_assesement  # Replace with your database name
+    volumes:
+      - mysql-data:/var/lib/mysql  # Persistent storage for database data
+
+volumes:
+  mysql-data:  # Named volume for persistent MySQL data
