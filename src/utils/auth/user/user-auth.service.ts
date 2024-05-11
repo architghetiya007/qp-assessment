@@ -8,15 +8,15 @@ export class UserAuthService {
     signToken(payload: AuthPayload) {
         return this.jwtService.signAsync(payload, {
             algorithm: 'HS256',
-            secret: process.env.JWT_SECRET_KEY,
-            expiresIn: process.env.JWT_ACCESS_TOKEN_EXPIRE
+            secret: '9c32d407a1598e0d',
+            expiresIn: '24h'
         });
     }
 
     verifyToken(token: string) {
         return this.jwtService.verifyAsync(token, {
             algorithms: ['HS256'],
-            secret: process.env.JWT_SECRET_KEY,
+            secret: '9c32d407a1598e0d',
         });
     }
 }
