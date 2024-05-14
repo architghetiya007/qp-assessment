@@ -2,7 +2,7 @@ import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/com
 import { Request } from 'express';
 import { UserAuthService } from '../user/user-auth.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersEntity } from 'src/users/users.entity';
+import { UsersEntity } from 'src/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()

@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, InternalServerErrorException, Unauthor
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { hashSync, compare } from "bcrypt";
-import { UsersEntity } from './users.entity';
+import { UsersEntity } from 'src/typeorm';
 import { UserAuthService } from 'src/utils/auth/user/user-auth.service';
 import { LoginUserRequestDTO, RegisterRequestDTO } from './DTO/request.dto';
 
@@ -65,7 +65,7 @@ export class UsersService {
   async loginUser(body: LoginUserRequestDTO) {
     let user: UsersEntity;
     try {
-      user = await this.usersRepository.findOne({ email: body.email });
+      user = await this.usersRepository.findOne({where:{ email: body.email }});
     } catch (error) {
       throw new InternalServerErrorException({
         status: false,

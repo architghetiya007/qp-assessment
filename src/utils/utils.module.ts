@@ -3,7 +3,7 @@ import { UserAuthService } from './auth/user/user-auth.service';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { UserAuthGuard } from './auth/user/user-auth.guard';
 import { AdminAuthGuard } from './auth/admin/admin-auth.guard';
-import { UsersEntity } from 'src/users/users.entity';
+import { UsersEntity } from 'src/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({

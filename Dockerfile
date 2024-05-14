@@ -10,4 +10,6 @@ RUN yarn install
 
 COPY . .
 
+EXPOSE 3003
+
 CMD [ "node", "dist/main.js" ]

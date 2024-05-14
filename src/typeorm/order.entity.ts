@@ -1,5 +1,5 @@
-import { ProductEntity } from 'src/product/product.entity';
-import { UsersEntity } from 'src/users/users.entity';
+import { ProductEntity } from './product.entity';
+import { UsersEntity } from './users.entity';
 import { Entity, Column, PrimaryGeneratedColumn, Timestamp, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 
 @Entity('order')

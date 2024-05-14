@@ -1,9 +1,7 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersEntity } from 'src/users/users.entity';
 import { MoreThan, Repository } from 'typeorm';
-import { ProductEntity } from 'src/product/product.entity';
-import { OrderEntity } from './order.entity';
+import { OrderEntity,ProductEntity,UsersEntity } from 'src/typeorm';
 import { OrderRequestDTO } from './dto/request.dto';
 import { randomBytes } from 'crypto';
 import { types } from 'util';
