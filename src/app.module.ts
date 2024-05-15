@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 import {TypeOrmModule} from '@nestjs/typeorm';
 import entities from './typeorm';
 import { ProductModule } from './product/product.module';
